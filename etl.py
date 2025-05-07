@@ -37,6 +37,5 @@ print(df_filtered.head())
 # Guardar a CSV
 df_filtered.to_csv('filtered_data.csv', index=False)
 
-# Descargar en Colab
-from google.colab import files
-files.download('filtered_data.csv')
+# Imprimir mensaje indicando que el archivo ha sido guardado
+print("El archivo 'filtered_data.csv' ha sido guardado correctamente.")
