@@ -1,14 +1,30 @@
-# Dockerfile para ETL de migración internacional
-FROM python:3.9-slim
+import pandas as pd
+import numpy as np
+import requests
+from io import StringIO
+# Extraer desde una URL
+url = 'https://people.sc.fsu.edu/~jburkardt/data/csv/hw_200.csv'
+response = requests.get(url)
+data = StringIO(response.text)
+df = pd.read_csv(data)
 
-WORKDIR /app
+# Ver los primeros datos
+df.head()
+# Renombrar columnas
+df.columns = ['Index', 'Height(Inches)', 'Weight(Pounds)', 'Extra Column']
 
-# Instalar dependencias
-COPY requirements.txt .
-RUN pip install -r requirements.txt
 
-# Copiar datos transformados
-COPY datos_transformados.csv /data/datos_transformados.csv
+df['Height(m)'] = df['Height(Inches)'] * 0.0254   # Pulgadas a metros
+df['Weight(kg)'] = df['Weight(Pounds)'] * 0.453592  # Libras a kilogramos
 
-# Comando para verificar los datos
-CMD ["bash", "-c", "echo 'Datos de migración transformados:' && python -c "import pandas as pd; df = pd.read_csv('/data/datos_transformados.csv'); print(df.head())""]
+# Filtrar personas con altura mayor a 1.60 metros
+df_filtered = df[df['Height(m)'] > 1.60]
+
+# Ver el resultado
+df_filtered.head()
+# Guardar a CSV
+df_filtered.to_csv('filtered_data.csv', index=False)
+
+# Descargar en Colab
+from google.colab import files
+files.download('filtered_data.csv')
