@@ -1,3 +1,16 @@
+# Dockerfile para ETL de migración internacional
+FROM python:3.9-slim
+
+WORKDIR /app
+
+# Instalar dependencias
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+# Copiar datos transformados
+COPY datos_transformados.csv /data/datos_transformados.csv
+
+
 import pandas as pd
 import numpy as np
 import requests
