@@ -19,12 +19,12 @@ data = StringIO(response.text)
 df = pd.read_csv(data)
 
 # Ver los primeros datos
-df.head()
+print(df.head())
 
-# Renombrar columnas
-df.columns = ['Index', 'Height(Inches)', 'Weight(Pounds)', 'Extra Column']
+# Renombrar columnas: Asegúrate de que el número de columnas coincida
+df.columns = ['Index', 'Height(Inches)', 'Weight(Pounds)']  # Solo tres nombres de columna
 
-
+# Convertir unidades: Pulgadas a metros y libras a kilogramos
 df['Height(m)'] = df['Height(Inches)'] * 0.0254   # Pulgadas a metros
 df['Weight(kg)'] = df['Weight(Pounds)'] * 0.453592  # Libras a kilogramos
 
@@ -32,7 +32,7 @@ df['Weight(kg)'] = df['Weight(Pounds)'] * 0.453592  # Libras a kilogramos
 df_filtered = df[df['Height(m)'] > 1.60]
 
 # Ver el resultado
-df_filtered.head()
+print(df_filtered.head())
 
 # Guardar a CSV
 df_filtered.to_csv('filtered_data.csv', index=False)
